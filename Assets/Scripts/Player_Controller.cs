@@ -21,7 +21,6 @@ public class Player_Controller : MonoBehaviour
     void Start()
     {
        _rb = GetComponent<Rigidbody2D>();
-
     }
 
      void FixedUpdate() 
@@ -55,7 +54,7 @@ public class Player_Controller : MonoBehaviour
        if(Input.GetKeyDown(KeyCode.Space))
        {
         _jumped = true;
-        Debug.Log("jump");
+     
        }
         
     }
