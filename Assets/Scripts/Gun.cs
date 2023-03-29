@@ -11,6 +11,8 @@ public class Gun : MonoBehaviour
     protected int _ammo;
     protected float _damage;
     protected Rigidbody2D _rb;
+    [SerializeField] protected GameObject _sprite;
+    protected bool _active;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -31,9 +33,14 @@ public class Gun : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && _active == true)
         {
             _shoot(angle);
+        }
+
+        if(_active == false) //will only reload when gun is not active
+        {
+            _reload();
         }
     }
 
@@ -44,7 +51,7 @@ public class Gun : MonoBehaviour
             //trig equation to calculate the how much force to place in the x and y direction and then applies it to the player
             Vector2 direction = (new Vector2(-(_recoil * Mathf.Cos(angle * Mathf.Deg2Rad)), -(_recoil * Mathf.Sin(angle * Mathf.Deg2Rad))));
             _rb.AddForce(direction);
-            //_ammo -= 1;
+            _ammo -= 1;
             Debug.Log(angle);
         }
        
@@ -58,6 +65,17 @@ public class Gun : MonoBehaviour
             _ammo = _ammoCap;
             _time = 0;
         }
+    }
+
+    public void Activate()
+    {
+        _sprite.SetActive(true);
+        _active = true;
+    }
+    public void Deactivate()
+    {
+        _sprite.SetActive(false);
+        _active = false;
     }
 
    
