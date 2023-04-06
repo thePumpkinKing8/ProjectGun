@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _rooms;
-    [SerializeField] private GameObject _room;
+    [SerializeField] private Room[] _rooms;
+    [SerializeField] private Room _room;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _room = Instantiate(_rooms[Random.Range(0, _rooms.Length)], new Vector3(0,0,0), Quaternion.identity,  transform.parent = this.gameObject.transform);
     }
 
     // Update is called once per frame
@@ -22,8 +22,8 @@ public class RoomController : MonoBehaviour
     public void SwitchRoom()
     {
         int Rand = Random.Range(0, _rooms.Length);
-        Destroy(_room);
-        _room = _rooms[Rand];
-        Instantiate(_rooms[Rand], new Vector3(0,0,0), Quaternion.identity);
+        _room.Unload();
+        _room = Instantiate(_rooms[Rand], new Vector3(0,0,0), Quaternion.identity, transform.parent = this.gameObject.transform);
+        
     }
 }

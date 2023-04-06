@@ -8,18 +8,25 @@ public class Doorexit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponentInParent<RoomController>();
+       _roomController = FindObjectOfType<RoomController>();
+      
+    }
+    void Update() 
+    {
+        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.gameObject.name == "Player")
+        {
+            Debug.Log("SWITCH");
+            _roomController.SwitchRoom();
+        }
+        
+       
+        
         
     }
-     void OnTriggerEnter(Collider collision)
-    {
-        _roomController.SwitchRoom();
-        Debug.Log("SWITCH");
-        
-    }
+    
 }

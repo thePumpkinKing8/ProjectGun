@@ -68,7 +68,7 @@ public class Player_Controller : MonoBehaviour
         if(_isGrounded && jump)
         {
             _rb.AddForce(new Vector2(0f, _jumpForce));
-            Debug.Log("jumped");
+          
         }
         if(move > 0)
         {
@@ -83,6 +83,8 @@ public class Player_Controller : MonoBehaviour
       {
         this.transform.position = Position;
       }
+
+       
 }
      
     
