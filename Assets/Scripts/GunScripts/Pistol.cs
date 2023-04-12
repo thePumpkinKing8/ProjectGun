@@ -17,6 +17,7 @@ public class Pistol : Gun
     }
     protected override void _shoot(float angle)
     {
+        base._shoot(angle);
         Debug.Log("Shoot");
     }
 }

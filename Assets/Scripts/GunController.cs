@@ -22,7 +22,7 @@ public class GunController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Q)) //deactivates the first gun then activates the next gun in the list 
         {
-            if(_activeGun >= _guns.Length) //wraps the list once the end is reached
+            if(_activeGun >= _guns.Length -1) //wraps the list once the end is reached
             {
                 _guns[_activeGun].Deactivate();
                 _activeGun = 0;

@@ -50,8 +50,8 @@ public class Gun : MonoBehaviour
     {
        if(_ammo >= 0)
         {
-           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction);
-            if(hit.transform.name != null)
+           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8));
+            if(hit.collider != null)
             {
                 Debug.Log(hit.transform.name);
             }
