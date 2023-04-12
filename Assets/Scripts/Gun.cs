@@ -7,10 +7,12 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float _recoil;
     [SerializeField] protected int _ammoCap;
     [SerializeField] protected float _reloadTime;
+    [SerializeField] protected GameObject _barrel;
     protected float _time;
     protected int _ammo;
     protected float _damage;
     protected Rigidbody2D _rb;
+    protected Vector3 _direction;
     [SerializeField] protected GameObject _sprite;
     protected bool _active;
     // Start is called before the first frame update
@@ -29,8 +31,8 @@ public class Gun : MonoBehaviour
 
         //finds the angle of the mouse relative to the gun and rotates it
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePosition - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        _direction = mousePosition - transform.position;
+        float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
         if(Input.GetMouseButtonDown(0) && _active == true)
@@ -48,11 +50,17 @@ public class Gun : MonoBehaviour
     {
        if(_ammo >= 0)
         {
+           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction);
+            if(hit.transform.name != null)
+            {
+                Debug.Log(hit.transform.name);
+            }
+           
+             
             //trig equation to calculate the how much force to place in the x and y direction and then applies it to the player
             Vector2 direction = (new Vector2(-(_recoil * Mathf.Cos(angle * Mathf.Deg2Rad)), -(_recoil * Mathf.Sin(angle * Mathf.Deg2Rad))));
             _rb.AddForce(direction);
             _ammo -= 1;
-            Debug.Log(angle);
         }
        
     }
@@ -67,6 +75,7 @@ public class Gun : MonoBehaviour
         }
     }
 
+    // sets the gun to be active
     public void Activate()
     {
         _sprite.SetActive(true);
