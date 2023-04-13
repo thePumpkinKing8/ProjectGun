@@ -49,8 +49,9 @@ public class Gun : MonoBehaviour
     protected virtual void _shoot(float angle)
     {
        if(_ammo >= 0)
-        {
-           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8));
+        { 
+            //fires a raycast in the direction of the mouse from the Barrel gameobjects location
+           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8)); //1 << 8 converts the players layer int (8) to the corresponding layer mask https://docs.unity3d.com/Manual/layermask-set.html
             if(hit.collider != null)
             {
                 Debug.Log(hit.transform.name);
