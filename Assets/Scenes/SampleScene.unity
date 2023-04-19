@@ -907,8 +907,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 211.6, y: -30}
-  m_SizeDelta: {x: 400, y: 60}
+  m_AnchoredPosition: {x: 440.60004, y: -30}
+  m_SizeDelta: {x: 344.765, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1143963776
 MonoBehaviour:
@@ -922,9 +922,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4817c0b93ccad45aa130dffc98341e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MaxNumberofHearts: 8
-  _NumberofHearts: 8
-  HeartWidth: 45
+  _MaxNumberofHearts: 6
+  _NumberofHearts: 6
+  HeartWidth: 50
 --- !u!4 &1162412374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 290739494684014580, guid: 76981201135ef1947b6cecce7fe38972, type: 3}

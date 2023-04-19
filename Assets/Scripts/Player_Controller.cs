@@ -88,7 +88,12 @@ public class Player_Controller : MonoBehaviour
         this.transform.position = Position;
       }
 
-       
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        this.playerhealth.RemoveHeart(1);
+    }
+
 }
      
     

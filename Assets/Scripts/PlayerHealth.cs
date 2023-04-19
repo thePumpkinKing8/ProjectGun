@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
 
     [SerializeField]
-    private int _MaxNumberofHearts = 8;
+    private int _MaxNumberofHearts = 6; //Players Full health, must be one less than amount of hearts displayed.
 
     [SerializeField]
-    private int _NumberofHearts = 8;
+    private int _NumberofHearts = 6; // Must match _MaxNumberofHearts.
 
     [SerializeField]
-    private float HeartWidth = 45.0f;
+    private float HeartWidth = 50.0f; // Size of the Image to remove a heart
 
     private RectTransform _rect;
 
@@ -25,9 +26,9 @@ public class PlayerHealth : MonoBehaviour
        private set
         {
 
-            if (value < 0) //when the player loses all hearts
+            if (value == 0) //when the player loses all hearts
             {
-
+                SceneManager.LoadScene("SampleScene");
             }
 
             _NumberofHearts = Mathf.Clamp(value, min:0, max:_MaxNumberofHearts);
