@@ -16,6 +16,8 @@ public class Player_Controller : MonoBehaviour
     private bool _jumped;
     public float Speed = 40f;
 
+    protected PlayerHealth playerhealth;
+
 
    
    
@@ -23,6 +25,8 @@ public class Player_Controller : MonoBehaviour
     {
        _rb = GetComponent<Rigidbody2D>();
        _sprite = GetComponent<SpriteRenderer>();
+
+        playerhealth = GameObject.Find("HealthCounter").GetComponent<PlayerHealth>();
     }
 
      void FixedUpdate() 
