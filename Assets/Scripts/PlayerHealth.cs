@@ -7,10 +7,10 @@ public class PlayerHealth : MonoBehaviour
 {
 
     [SerializeField]
-    private int _MaxNumberofHearts = 6; //Players Full health, must be one less than amount of hearts displayed.
+    private int _MaxNumberofHearts = 8; //Players Full health, Give player 1 extra health to sovle bug. 
 
     [SerializeField]
-    private int _NumberofHearts = 6; // Must match _MaxNumberofHearts.
+    private int _NumberofHearts = 8; // Must match _MaxNumberofHearts.
 
     [SerializeField]
     private float HeartWidth = 50.0f; // Size of the Image to remove a heart
@@ -40,6 +40,8 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         _rect = transform as RectTransform;
+
+        this.RemoveHeart(1); //Remove the extra heart from the player to prevent bug
     }
 
     // Update is called once per frame
