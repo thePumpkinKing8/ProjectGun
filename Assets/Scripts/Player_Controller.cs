@@ -15,6 +15,7 @@ public class Player_Controller : MonoBehaviour
     private Rigidbody2D _rb;
     private bool _jumped;
     public float Speed = 40f;
+    private Animator _animator;
 
     protected PlayerHealth playerhealth;
 
@@ -23,6 +24,7 @@ public class Player_Controller : MonoBehaviour
    
     void Start()
     {
+        _animator = GetComponent<Animator>();
        _rb = GetComponent<Rigidbody2D>();
        _sprite = GetComponent<SpriteRenderer>();
 
@@ -48,6 +50,7 @@ public class Player_Controller : MonoBehaviour
         {
             _isGrounded = false;
         }
+        _animator.SetBool("Grounded", _isGrounded);
 		
 		Move((Input.GetAxisRaw("Horizontal") * Speed) * Time.fixedDeltaTime, _jumped);
         _jumped = false;
@@ -60,9 +63,18 @@ public class Player_Controller : MonoBehaviour
        if(Input.GetKeyDown(KeyCode.Space))
        {
         _jumped = true;
-     
        }
+       if((Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x > 0) && this.transform.localScale.x < 0)
+       {
+        _animator.SetFloat("Direction", 1);
+        this.transform.localScale = new Vector3 (-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
         
+       }
+       else if((Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x < 0 ) && this.transform.localScale.x > 0)
+       {
+        _animator.SetFloat("Direction", -1);
+        this.transform.localScale = new Vector3 (-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+       }	
     }
 
      public void Move(float move, bool jump)
@@ -73,26 +85,38 @@ public class Player_Controller : MonoBehaviour
         {
             _rb.AddForce(new Vector2(0f, _jumpForce));
           
-        }
-        if(move > 0)
+        }	
+        
+        if(move != 0)
         {
-            _sprite.flipX = true;
+            _animator.SetBool("Moving", true);
+            _animator.SetFloat("Velocity", Mathf.Sign(_rb.velocity.x));	
         }
-        else if(move < 0)
+        else
         {
-            _sprite.flipX = false;
-        }			
+            
+            _animator.SetBool("Moving", false);
+            _animator.SetFloat("Velocity",0);
+        }
+        
       }
       public void SetPosition(Vector3 Position)
       {
         this.transform.position = Position;
       }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
+      IEnumerator TakeDamage()
     {
         this.playerhealth.RemoveHeart(1);
+        _sprite.color = Color.red;
+        yield return new WaitForSeconds(1f);
+        _sprite.color = Color.white;
     }
+
+    public void _takeDamage()
+    {
+        StartCoroutine(TakeDamage());
+    }
+    
 
 }
      

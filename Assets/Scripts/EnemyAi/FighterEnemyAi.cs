@@ -4,28 +4,34 @@ using UnityEngine;
 
 public class FighterEnemyAi : MonoBehaviour
 {
-    [SerializeField] private float _jumpForce = 400f;
+    [SerializeField] private float _jumpForce = 10f;
     [SerializeField] private float _movementSmoothing = 0.5f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _groundCheck;
     const float _groundCheckRadius = .2f;
     private bool _isGrounded;
+    private bool _canBeHit;
     private Vector3 _velocity = Vector3.zero;
     private Rigidbody2D _rb;
     private bool _jumped;
+    private SpriteRenderer _sprite;
     public float speed = 3f;
-
-    private Transform player;
-
+    [SerializeField] private float _health = 8;
+    private Player_Controller _player;
+    private Transform _playerLocation;
+    private float BaseKnockBack = 100;
     private float distance;
+    private bool _isAttacking;
+    private bool _isActive;
 
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-
-       player = GameObject.Find("Player").transform;
-
+        _sprite = GetComponent<SpriteRenderer>();
+        _player = GameManager.Instance.Player;
+        _playerLocation = _player.GetComponent<Transform>();
+        _canBeHit = true;
     }
 
     void FixedUpdate()
@@ -48,31 +54,96 @@ public class FighterEnemyAi : MonoBehaviour
             _isGrounded = false;
         }
 
-        Move((Input.GetAxisRaw("Horizontal") * speed) * Time.fixedDeltaTime, _jumped);
-        _jumped = false;
+        
     }
+
+
+    IEnumerator HitDelay()
+    {
+        yield return new WaitForSeconds(.5f);
+        _sprite.color = Color.white;
+        _canBeHit = true;
+    }
+
+
+
+
+    IEnumerator JumpAttack()
+    {
+        _isAttacking = true;
+        _sprite.color = Color.yellow;
+        float speedContainer = speed;
+        speed = 0;
+        yield return new WaitForSeconds(.5f);
+        Vector2 enemyToPlayer = _playerLocation.position - this.transform.position;
+        enemyToPlayer.Normalize();
+        _rb.AddForce(enemyToPlayer * _jumpForce);
+        yield return new WaitForSeconds(2f);
+        _sprite.color = Color.white;
+        speed = speedContainer;
+        yield return new WaitForSeconds(3f);
+        _isAttacking = false;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(_isAttacking)
+        {
+            if(collision.transform.tag == "Player")
+            {
+                collision.transform.GetComponent<Player_Controller>()._takeDamage();
+                //_rb.AddForce(-_rb.velocity);
+            }
+        }
+    }
+
+
 
     // Update is called once per frame
     void Update()
     {
 
-        distance = Vector2.Distance(transform.position, player.transform.position);
-
-        Vector2 direction = player.transform.position - transform.position;
-
-        transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
-
+        distance = Vector2.Distance(transform.position, _playerLocation.transform.position);
+        Debug.Log(distance);
+        Vector2 direction = _playerLocation.transform.position - transform.position;
+        if(distance < 5f)
+        {
+            _isActive = true;
+        }
+        if(_isActive == true)
+        {
+            transform.position = Vector2.MoveTowards(this.transform.position, _playerLocation.transform.position, speed * Time.deltaTime);
+        }
+        
+        if(distance <= 3f && _isAttacking == false) 
+        {
+            StartCoroutine(JumpAttack());
+        }
     }
 
-    public void Move(float move, bool jump)
+    
+   
+    public void TakeDamage(float angle, float damage)
     {
-        Vector3 targetVelocity = new Vector2(move * 10f, _rb.velocity.y);
-        _rb.velocity = Vector3.SmoothDamp(_rb.velocity, targetVelocity, ref _velocity, _movementSmoothing);
-        if (_isGrounded && jump)
+        if(_canBeHit == true)
         {
-            _rb.AddForce(new Vector2(0f, _jumpForce));
-            Debug.Log("jumped");
+            _health -= damage;
+            Vector2 direction = (new Vector2(-((BaseKnockBack * damage) * Mathf.Cos(angle * Mathf.Deg2Rad)), -((BaseKnockBack * damage) * Mathf.Sin(angle * Mathf.Deg2Rad))));
+            _rb.AddForce(-direction);
+            _sprite.color = Color.red;
+            _canBeHit = false;
+            if(_health <= 0)
+            {
+                _die();
+            }
+        StartCoroutine(HitDelay());
         }
+    }
+
+    private void _die()
+    {
+        StopAllCoroutines();
+        Destroy(this.gameObject);
     }
 
 }

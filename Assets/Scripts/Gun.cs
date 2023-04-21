@@ -10,58 +10,78 @@ public class Gun : MonoBehaviour
     [SerializeField] protected GameObject _barrel;
     protected float _time;
     protected int _ammo;
-    protected float _damage;
+    [SerializeField] protected float _damage;
     protected Rigidbody2D _rb;
     protected Vector3 _direction;
+    protected GunController _gunController;
     [SerializeField] protected GameObject _sprite;
     protected bool _active;
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        _rb = GetComponentInParent<Rigidbody2D>();
+        _rb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
+        _gunController = GetComponentInParent<GunController>();
         _ammo = _ammoCap;
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-
-
-        
-
-        //finds the angle of the mouse relative to the gun and rotates it
+          //finds the angle of the mouse relative to the gun and rotates it
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _direction = mousePosition - transform.position;
         float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        
+    
+        if(_direction.x > 0 )
+        {
+           _sprite.GetComponent<SpriteRenderer>().flipY = false;
+           // this.transform.localPosition = new Vector3(0,0, 0);
+            
+            
+        }
+        if(_direction.x < 0 )
+        {
+           
+            _sprite.GetComponent<SpriteRenderer>().flipY = true;
+           // this.transform.localPosition = new Vector3(0,-0.025f, 0);
+           
+           
+        }
+    
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
         if(Input.GetMouseButtonDown(0) && _active == true)
         {
             _shoot(angle);
+
         }
 
         if(_active == false) //will only reload when gun is not active
         {
             _reload();
         }
+        
     }
 
     protected virtual void _shoot(float angle)
     {
        if(_ammo >= 0)
         { 
-            //fires a raycast in the direction of the mouse from the Barrel gameobjects location
-           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8)); //1 << 8 converts the players layer int (8) to the corresponding layer mask https://docs.unity3d.com/Manual/layermask-set.html
-            if(hit.collider != null)
-            {
-                Debug.Log(hit.transform.name);
-            }
-           
-             
             //trig equation to calculate the how much force to place in the x and y direction and then applies it to the player
             Vector2 direction = (new Vector2(-(_recoil * Mathf.Cos(angle * Mathf.Deg2Rad)), -(_recoil * Mathf.Sin(angle * Mathf.Deg2Rad))));
             _rb.AddForce(direction);
             _ammo -= 1;
+
+            //fires a raycast in the direction of the mouse from the Barrel gameobjects location
+           RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8)); //1 << 8 converts the players layer int (8) to the corresponding layer mask https://docs.unity3d.com/Manual/layermask-set.html
+            if(hit.collider.transform.tag == "Enemy")
+            {
+                hit.transform.GetComponent<FighterEnemyAi>().TakeDamage(angle, _damage);
+                
+            }
+           
+           
         }
        
     }
@@ -87,6 +107,8 @@ public class Gun : MonoBehaviour
         _sprite.SetActive(false);
         _active = false;
     }
+
+    
 
    
     

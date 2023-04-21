@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - ExitDoor
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Ground
   - Wall
   - Player
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -39,6 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1231178171
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Game
+    uniqueID: 1392192095
+    locked: 0
+  - name: Player
+    uniqueID: 4206587657
     locked: 0

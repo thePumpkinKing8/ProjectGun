@@ -5,6 +5,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     private int _activeGun;
+    [SerializeField] private GameObject _socket;
     [SerializeField] private Gun[] _guns; //make sure the objects in this list are from the scene and not the prefab folder
     // Start is called before the first frame update
     void Start() //deactivates all guns then activates the first gun in the list
@@ -35,5 +36,6 @@ public class GunController : MonoBehaviour
                 _guns[_activeGun].Activate();
             }
         }
+        _guns[_activeGun].transform.position = _socket.transform.position;
     }
 }
