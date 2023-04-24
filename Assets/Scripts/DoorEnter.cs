@@ -6,17 +6,11 @@ public class DoorEnter : MonoBehaviour
 {
     private Player_Controller _player;
    
-    // Start is called before the first frame update
-    void Awake()
+    void Awake() //places the player at this location when new room is loaded
     {
         _player = GameObject.Find("Player").GetComponent<Player_Controller>();
         
         _player.transform.position = this.transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

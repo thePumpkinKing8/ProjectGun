@@ -32,21 +32,15 @@ public class Gun : MonoBehaviour
         _direction = mousePosition - transform.position;
         float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-    
+        //flips the player based on the mouse location
         if(_direction.x > 0 )
         {
            _sprite.GetComponent<SpriteRenderer>().flipY = false;
-           // this.transform.localPosition = new Vector3(0,0, 0);
-            
-            
         }
         if(_direction.x < 0 )
         {
            
             _sprite.GetComponent<SpriteRenderer>().flipY = true;
-           // this.transform.localPosition = new Vector3(0,-0.025f, 0);
-           
-           
         }
     
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -75,7 +69,7 @@ public class Gun : MonoBehaviour
 
             //fires a raycast in the direction of the mouse from the Barrel gameobjects location
            RaycastHit2D hit = Physics2D.Raycast(_barrel.transform.position, _direction, Mathf.Infinity, ~(1 << 8)); //1 << 8 converts the players layer int (8) to the corresponding layer mask https://docs.unity3d.com/Manual/layermask-set.html
-            if(hit.collider.transform.tag == "Enemy")
+            if(hit.collider.transform.tag == "Enemy") //deals damage if target is an enemy
             {
                 hit.transform.GetComponent<FighterEnemyAi>().TakeDamage(angle, _damage);
                 

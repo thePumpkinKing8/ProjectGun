@@ -11,12 +11,7 @@ public class Doorexit : MonoBehaviour
        _roomController = FindObjectOfType<RoomController>();
       
     }
-    void Update() 
-    {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) //switches rooms when player enters
     {
         if(other.gameObject.name == "Player")
         {

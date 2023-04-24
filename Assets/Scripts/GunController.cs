@@ -36,6 +36,6 @@ public class GunController : MonoBehaviour
                 _guns[_activeGun].Activate();
             }
         }
-        _guns[_activeGun].transform.position = _socket.transform.position;
+        _guns[_activeGun].transform.position = _socket.transform.position; //places the guns in the players arm socket
     }
 }

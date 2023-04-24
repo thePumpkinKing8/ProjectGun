@@ -232,7 +232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8597765588363522459, guid: 162f8d22c54acfa47939965485fbe613, type: 3}
       propertyPath: m_SortingLayerID
-      value: -88379639
+      value: -1003714711
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 162f8d22c54acfa47939965485fbe613, type: 3}
@@ -658,7 +658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1823798755275227063, guid: 76981201135ef1947b6cecce7fe38972, type: 3}
       propertyPath: m_SortingLayerID
-      value: -88379639
+      value: -1003714711
       objectReference: {fileID: 0}
     - target: {fileID: 3529066901508442794, guid: 76981201135ef1947b6cecce7fe38972, type: 3}
       propertyPath: _damage
@@ -911,7 +911,9 @@ MonoBehaviour:
   _rooms:
   - {fileID: -7560379241016591308, guid: 72d778a85d8c8024683496a906bf42db, type: 3}
   - {fileID: -8142219445324754107, guid: 5ef60dfed3866e04db625669171ccf0e, type: 3}
-  _room: {fileID: 0}
+  - {fileID: 3039977634149688396, guid: 8f0f70b4dac2c4c4ebcafbf06f3c446d, type: 3}
+  - {fileID: 2458177600796397953, guid: f93efbe0c8e6135469dcdb027b163672, type: 3}
+  _room: {fileID: -8142219445324754107, guid: 5ef60dfed3866e04db625669171ccf0e, type: 3}
 --- !u!4 &1592362384
 Transform:
   m_ObjectHideFlags: 0

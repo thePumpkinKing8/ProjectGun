@@ -5,22 +5,15 @@ using UnityEngine;
 public class FighterEnemyAi : MonoBehaviour
 {
     [SerializeField] private float _jumpForce = 10f;
-    [SerializeField] private float _movementSmoothing = 0.5f;
-    [SerializeField] private LayerMask _groundLayer;
-    [SerializeField] private Transform _groundCheck;
-    const float _groundCheckRadius = .2f;
-    private bool _isGrounded;
     private bool _canBeHit;
-    private Vector3 _velocity = Vector3.zero;
     private Rigidbody2D _rb;
-    private bool _jumped;
     private SpriteRenderer _sprite;
     public float speed = 3f;
     [SerializeField] private float _health = 8;
     private Player_Controller _player;
     private Transform _playerLocation;
-    private float BaseKnockBack = 100;
-    private float distance;
+    private float _baseKnockBack = 100;
+    private float _distance;
     private bool _isAttacking;
     private bool _isActive;
 
@@ -34,31 +27,8 @@ public class FighterEnemyAi : MonoBehaviour
         _canBeHit = true;
     }
 
-    void FixedUpdate()
-    {
-        //creates circle collider that checks to see if any gameobjects within its radius are part of the ground layer and sets grounded to true if it does
-        Collider2D collider = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
-        if (collider != null)
-        {
-            if (collider.gameObject != gameObject)
-            {
-                _isGrounded = true;
-            }
-            else
-            {
-                _isGrounded = false;
-            }
-        }
-        else
-        {
-            _isGrounded = false;
-        }
 
-        
-    }
-
-
-    IEnumerator HitDelay()
+    IEnumerator HitDelay() //prevents ai from getting stunlocked
     {
         yield return new WaitForSeconds(.5f);
         _sprite.color = Color.white;
@@ -68,7 +38,7 @@ public class FighterEnemyAi : MonoBehaviour
 
 
 
-    IEnumerator JumpAttack()
+    IEnumerator JumpAttack() //ai stops and charges an attack before lunging at the player
     {
         _isAttacking = true;
         _sprite.color = Color.yellow;
@@ -85,14 +55,14 @@ public class FighterEnemyAi : MonoBehaviour
         _isAttacking = false;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision) //checks if attack onnects with player
     {
-        if(_isAttacking)
+        if(_isAttacking == true)
         {
             if(collision.transform.tag == "Player")
             {
                 collision.transform.GetComponent<Player_Controller>()._takeDamage();
-                //_rb.AddForce(-_rb.velocity);
+                _rb.AddForce(-_rb.velocity);
             }
         }
     }
@@ -103,10 +73,9 @@ public class FighterEnemyAi : MonoBehaviour
     void Update()
     {
 
-        distance = Vector2.Distance(transform.position, _playerLocation.transform.position);
-        Debug.Log(distance);
+        _distance = Vector2.Distance(transform.position, _playerLocation.transform.position);
         Vector2 direction = _playerLocation.transform.position - transform.position;
-        if(distance < 5f)
+        if(_distance < 5f) //spider will only attack player if player is close enough
         {
             _isActive = true;
         }
@@ -115,7 +84,7 @@ public class FighterEnemyAi : MonoBehaviour
             transform.position = Vector2.MoveTowards(this.transform.position, _playerLocation.transform.position, speed * Time.deltaTime);
         }
         
-        if(distance <= 3f && _isAttacking == false) 
+        if(_distance <= 3f && _isAttacking == false) 
         {
             StartCoroutine(JumpAttack());
         }
@@ -123,12 +92,12 @@ public class FighterEnemyAi : MonoBehaviour
 
     
    
-    public void TakeDamage(float angle, float damage)
+    public void TakeDamage(float angle, float damage) //deals damage to the spider and knocks it backwards
     {
         if(_canBeHit == true)
         {
             _health -= damage;
-            Vector2 direction = (new Vector2(-((BaseKnockBack * damage) * Mathf.Cos(angle * Mathf.Deg2Rad)), -((BaseKnockBack * damage) * Mathf.Sin(angle * Mathf.Deg2Rad))));
+            Vector2 direction = (new Vector2(-((_baseKnockBack * damage) * Mathf.Cos(angle * Mathf.Deg2Rad)), -((_baseKnockBack * damage) * Mathf.Sin(angle * Mathf.Deg2Rad))));
             _rb.AddForce(-direction);
             _sprite.color = Color.red;
             _canBeHit = false;
@@ -140,7 +109,7 @@ public class FighterEnemyAi : MonoBehaviour
         }
     }
 
-    private void _die()
+    private void _die() //kills the spider when called
     {
         StopAllCoroutines();
         Destroy(this.gameObject);

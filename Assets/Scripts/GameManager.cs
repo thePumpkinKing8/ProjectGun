@@ -32,14 +32,4 @@ public class GameManager : MonoBehaviour
         _player = GetComponentInChildren<Player_Controller>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void NextRoom(Vector3 Position)
-    {
-        _player.SetPosition(Position);
-    }
-    
 }
